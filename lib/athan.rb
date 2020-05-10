@@ -34,19 +34,16 @@ class Athan
 
   def less
     to_remove = %w[Sunrise Sunset Imsak Midnight]
-    @obj&.each { |date, timings| to_remove.each { |key| timings.delete(key) } }
+    @obj.transform_values! { |timings| timings.select { |key| !to_remove.include?(key) } }
     self
   end
 
   def pretty
-    # TODO: Fix end of stdout \n
-    sep = @obj.one? ? '' : "\n"
-    pretty_array = @obj
-      .map do |date, timings| timings.map { |key, time| "#{key.light_green} -> #{time.light_cyan}" }
-      .push(sep)
-      .unshift("#{date.strftime("%B %-d, %Y").light_yellow}\n")
-      .join("\n")
-    end
+    @obj.map do |date, timings|
+      ret = ["#{date.strftime("%B %-d, %Y").light_yellow}\n"]
+      ret << timings.map { |key, time| "#{key.light_green}: #{time.light_cyan}" }
+      ret.join("\n")
+    end.join("\n\n")
   end
 
   def timings
