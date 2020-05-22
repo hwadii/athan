@@ -8,5 +8,5 @@ response = JSON.load(file)
 file.close
 
 athan = Athan.new(response)
-puts athan.three.less.pretty
+puts athan.today.pretty
 

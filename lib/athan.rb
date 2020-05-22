@@ -8,6 +8,11 @@ class Athan
     @obj = nil
   end
 
+  def get(date = Date.today)
+    @obj = { date => @timings.fetch(date) }
+    self
+  end
+
   def today
     @obj = { Date.today => @timings.fetch(Date.today) }
     self
