@@ -5,31 +5,31 @@ require 'colorize'
 class Athan
   def initialize(payload)
     @timings = payload['data'].to_h { |day| [Helpers.format_unix(day['date']['timestamp'].to_i), day['timings']] }
-    @obj = nil
+    @value = nil
   end
 
   def get(date = Date.today)
-    @obj = { date => @timings.fetch(date) }
+    @value = { date => @timings.fetch(date) }
     self
   end
 
   def today
-    @obj = { Date.today => @timings.fetch(Date.today) }
+    @value = { Date.today => @timings.fetch(Date.today) }
     self
   end
 
   def yesterday
-    @obj = { Date.today.prev_day => @timings.fetch(Date.today.prev_day) }
+    @value = { Date.today.prev_day => @timings.fetch(Date.today.prev_day) }
     self
   end
 
   def tomorrow
-    @obj = { Date.today.next => @timings.fetch(Date.today.next) }
+    @value = { Date.today.next => @timings.fetch(Date.today.next) }
     self
   end
 
   def three
-    @obj = {
+    @value = {
       Date.today.prev_day => @timings.fetch(Date.today.prev_day),
       Date.today => @timings.fetch(Date.today),
       Date.today.next => @timings.fetch(Date.today.next),
@@ -39,12 +39,12 @@ class Athan
 
   def less
     to_remove = %w[Sunrise Sunset Imsak Midnight]
-    @obj.transform_values! { |timings| timings.select { |key| !to_remove.include?(key) } }
+    @value.transform_values! { |timings| timings.select { |key| !to_remove.include?(key) } }
     self
   end
 
   def pretty
-    @obj.map do |date, timings|
+    @value.map do |date, timings|
       ret = ["#{date.strftime("%B %-d, %Y").light_yellow}\n"]
       ret << timings.map { |key, time| "#{key.light_green}: #{time.light_cyan}" }
       ret.join("\n")
@@ -56,6 +56,6 @@ class Athan
   end
 
   def debug
-    JSON.pretty_generate(@obj)
+    JSON.pretty_generate(@value)
   end
 end
