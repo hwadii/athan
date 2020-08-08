@@ -1,12 +1,11 @@
+#!/usr/bin/env ruby
+
 require 'date'
 require 'json'
 require './lib/athan.rb'
-require './lib/helpers.rb'
+require './lib/cache.rb'
 
-file = File.open './paris.json'
-response = JSON.load(file)
-file.close
-
-athan = Athan.new(response)
+raw_payload = GetAthan.new(city: 'Marseille', country: 'France')
+athan = raw_payload.produce
 puts athan.today.pretty
 
