@@ -1,20 +1,18 @@
 require 'httparty'
+require_relative 'helpers'
 
-CACHE_NAME = 'cache.json'
-
-class GetAthan
+class Cache
   include HTTParty
+  extend Helpers
+
   base_uri 'api.aladhan.com'
 
   def initialize(city: nil, country: nil)
     @options = { query: { city: city, country: country, method: 12 } }
     @key = "#{city}/#{country}"
-    if !File.exist?(CACHE_NAME)
-      File.new(CACHE_NAME, File::CREAT | File::RDWR, 0644)
-    end
-    file = File.open(CACHE_NAME)
-    @cache = JSON.load(file) || Hash.new(0)
-    file.close
+    cache_file = self.class.find_or_create_cache
+    @cache = JSON.load(cache_file) || Hash.new(0)
+    cache_file.close
   end
 
   def make_request
@@ -32,7 +30,7 @@ class GetAthan
   def write_cache(to_write)
     return if to_write.body.nil?
     @cache[@key] = JSON.load(to_write.body)
-    File.write(CACHE_NAME, JSON.fast_generate(@cache))
+    File.write(Helpers::CACHE_NAME, JSON.fast_generate(@cache))
     to_write
   end
 

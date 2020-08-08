@@ -1,10 +1,12 @@
-require './lib/helpers.rb'
+require_relative 'helpers'
 require 'json'
 require 'colorize'
 
 class Athan
+  extend Helpers
+
   def initialize(payload)
-    @timings = payload['data'].to_h { |day| [Helpers.format_unix(day['date']['timestamp'].to_i), day['timings']] }
+    @timings = payload['data'].to_h { |day| [self.class.format_unix(day['date']['timestamp'].to_i), day['timings']] }
     @value = nil
   end
 
@@ -30,9 +32,9 @@ class Athan
 
   def three
     @value = {
-      Date.today.prev_day => @timings.fetch(Date.today.prev_day),
       Date.today => @timings.fetch(Date.today),
       Date.today.next => @timings.fetch(Date.today.next),
+      Date.today.next.next => @timings.fetch(Date.today.next.next),
     }
     self
   end
@@ -55,7 +57,7 @@ class Athan
     @timings
   end
 
-  def debug
+  def as_json
     JSON.pretty_generate(@value)
   end
 end
