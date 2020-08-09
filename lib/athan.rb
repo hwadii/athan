@@ -20,11 +20,6 @@ class Athan
     self
   end
 
-  def yesterday
-    @value = { Date.today.prev_day => @timings.fetch(Date.today.prev_day) }
-    self
-  end
-
   def tomorrow
     @value = { Date.today.next => @timings.fetch(Date.today.next) }
     self
@@ -59,5 +54,20 @@ class Athan
 
   def as_json
     JSON.pretty_generate(@value)
+  end
+
+  def self.build_method(athan: nil, args: nil)
+    call = athan.today
+    return if athan.nil?
+    args.each do |key, value|
+      case key
+      when :three
+        call = call.three
+      when :fetch
+        call = call.get(value)
+      end
+    end
+    call = call.less
+    args.key?(:json) ? call.as_json : call.pretty
   end
 end
