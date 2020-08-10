@@ -35,8 +35,9 @@ class Athan
   end
 
   def less
+    all_keys = %w[Fajr Sunrise Dhuhr Asr Sunset Maghrib Isha Imsak Midnight]
     to_remove = %w[Sunrise Sunset Imsak Midnight]
-    @value.transform_values! { |timings| timings.select { |key| !to_remove.include?(key) } }
+    @value.transform_values! { |timings| timings.slice(*all_keys - to_remove) }
     self
   end
 
@@ -67,7 +68,7 @@ class Athan
         call = call.get(value)
       end
     end
-    call = call.less
+    call = call.less unless args.key?(:more)
     args.key?(:json) ? call.as_json : call.pretty
   end
 end

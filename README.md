@@ -11,6 +11,7 @@ The CLI accepts the following arguments:
 - a string representing the city and country: e.g. `Rabat/Morocco`.
 - `-sSEP, --sep SEP`: the separator to be used between city and country. Default:
     `'/'`.
+- `-m, --more`: prints other notable timings besides the five daily prayers.
 - `-t, --three`: prints the next three days worth of prayer timings, including
     the current day.
 - `-J, --json`: prints output as a json, to be consumed by another program.
@@ -20,28 +21,33 @@ The CLI accepts the following arguments:
 
 Print the prayer timings for the current date.
 ```bash
-$ ./bin/athan.rb 'Rabat/Morocco'
+$ ./bin/athan 'Rabat/Morocco'
 ```
 
 Print the prayer timings for the next three days including the current one.
 ```bash
-$ ./bin/athan.rb -t 'Rabat/Morocco'
+$ ./bin/athan -t 'Rabat/Morocco'
+```
+
+Print other notable timings besides the five daily prayers.
+```bash
+$ ./bin/athan -tm 'Rabat/Morocco'
 ```
 
 Print the output as json.
 ```bash
-$ ./bin/athan.rb -J 'Rabat/Morocco'
+$ ./bin/athan -J 'Rabat/Morocco'
 ```
 
 It is also possible to combine options. For example, print next three days as
 json.
 ```bash
-$ ./bin/athan.rb -tJ 'Rabat/Morocco'
+$ ./bin/athan -tJ 'Rabat/Morocco'
 ```
 
 Or print the timings for a given date as json.
 ```bash
-$ ./bin/athan.rb -Jf'2020-08-03' 'Rabat/Morocco'
+$ ./bin/athan -Jf'2020-08-03' 'Rabat/Morocco'
 ```
 
 # Web API

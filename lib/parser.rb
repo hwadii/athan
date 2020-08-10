@@ -23,6 +23,9 @@ class Parser
       parser.on('-sSEP', '--sep SEP', 'Specify separator. Default: \'/\'') do |sep|
         @options[:sep] = sep
       end
+      parser.on('-m', '--more', 'Display all the possible timings. Default: 5 timings.') do
+        @options[:more] = true
+      end
     end.parse!
     city, country = get_location
     @options[:city] = city

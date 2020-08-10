@@ -2,7 +2,7 @@ require 'date'
 
 module Helpers
   CACHE_NAME = 'cache.json'
-  OPTIONS_NAME = %i[json three fetch].freeze
+  OPTIONS_NAME = %i[json three fetch more].freeze
 
   def format_unix(unix)
     Time.at(unix).utc.to_date
