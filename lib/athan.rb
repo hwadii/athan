@@ -58,8 +58,8 @@ class Athan
   end
 
   def self.build_method(athan: nil, args: nil)
-    call = athan.today
     return if athan.nil?
+    call = athan.today
     args.each do |key, value|
       case key
       when :three
