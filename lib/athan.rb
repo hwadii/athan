@@ -5,6 +5,8 @@ require 'colorize'
 class Athan
   extend Helpers
 
+  attr_reader :timings
+
   def initialize(payload)
     @timings = payload['data'].to_h { |day| [self.class.format_unix(day['date']['timestamp'].to_i), day['timings']] }
     @value = nil
@@ -29,7 +31,7 @@ class Athan
     @value = {
       Date.today => @timings.fetch(Date.today),
       Date.today.next => @timings.fetch(Date.today.next),
-      Date.today.next.next => @timings.fetch(Date.today.next.next),
+      Date.today.next.next => @timings.fetch(Date.today.next.next)
     }
     self
   end
@@ -49,16 +51,13 @@ class Athan
     end.join("\n\n")
   end
 
-  def timings
-    @timings
-  end
-
   def as_json
     JSON.pretty_generate(@value)
   end
 
   def self.build_method(athan: nil, args: nil)
     return if athan.nil?
+
     call = athan.today
     args.each do |key, value|
       case key
