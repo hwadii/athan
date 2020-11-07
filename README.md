@@ -88,3 +88,4 @@ $ bundle install
     - [x] `-f` or `--fetch` which accepts a date and gets the prayer times of an arbitrary date
 - [ ] Invalidation mechanism for cache (e.g. at the end of the month => the city/country key will still exist but there won't be any correct timings available) 
 - [ ] Better caching mechanism (dotfile?, encryption?)
+- [ ] Ability to customize colors

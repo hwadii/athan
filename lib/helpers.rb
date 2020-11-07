@@ -9,9 +9,7 @@ module Helpers
   end
 
   def find_or_create_cache
-    if !File.exist?(CACHE_NAME)
-      File.new(CACHE_NAME, File::CREAT | File::RDWR, 0644)
-    end
+    File.new(CACHE_NAME, File::CREAT | File::RDWR, 0644) unless File.exist?(CACHE_NAME)
     File.open(CACHE_NAME)
   end
 end

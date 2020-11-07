@@ -3,14 +3,14 @@ require_relative 'helpers'
 
 class Cache
   include HTTParty
-  extend Helpers
+  include Helpers
 
   base_uri 'api.aladhan.com'
 
   def initialize(city: nil, country: nil)
     @options = { query: { city: city, country: country, method: 12 } }
     @key = "#{city}/#{country}"
-    cache_file = self.class.find_or_create_cache
+    cache_file = find_or_create_cache
     @cache = JSON.load(cache_file) || Hash.new(0)
     cache_file.close
   end
@@ -30,7 +30,7 @@ class Cache
   def write_cache(to_write)
     return if to_write.body.nil?
     @cache[@key] = JSON.load(to_write.body)
-    File.write(Helpers::CACHE_NAME, JSON.fast_generate(@cache))
+    File.write(CACHE_NAME, JSON.fast_generate(@cache))
     to_write
   end
 
