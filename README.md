@@ -16,7 +16,7 @@ The CLI accepts the following arguments:
     the current day.
 - `-J, --json`: prints output as a json, to be consumed by another program.
 - `-fDATE, --fetch DATE`: prints the prayer timings for the given day.
-- `-n, --next`: prints the prayer timing of the next prayer of the day.
+- `-n, --next`: prints the timing of the next prayer of the day.
 
 ## Example
 
