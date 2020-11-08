@@ -16,6 +16,7 @@ The CLI accepts the following arguments:
     the current day.
 - `-J, --json`: prints output as a json, to be consumed by another program.
 - `-fDATE, --fetch DATE`: prints the prayer timings for the given day.
+- `-n, --next`: prints the prayer timing of the next prayer of the day.
 
 ## Example
 
@@ -86,6 +87,7 @@ $ bundle install
     - [x] `-t` or `--three` to get next three days of prayer times
     - [x] `-J` or `--json` to get output in raw json for usage in other scripts
     - [x] `-f` or `--fetch` which accepts a date and gets the prayer times of an arbitrary date
+    - [x] `-n` to get the next prayer of the current day
 - [ ] Invalidation mechanism for cache (e.g. at the end of the month => the city/country key will still exist but there won't be any correct timings available) 
 - [ ] Better caching mechanism (dotfile?, encryption?)
 - [ ] Ability to customize colors

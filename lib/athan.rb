@@ -5,34 +5,25 @@ require 'colorize'
 class Athan
   extend Helpers
 
-  attr_reader :timings
+  attr_reader :timings, :value
 
   def initialize(payload)
     @timings = payload['data'].to_h { |day| [self.class.format_unix(day['date']['timestamp'].to_i), day['timings']] }
     @value = nil
   end
 
-  def get(date = Date.today)
+  def get(date: Date.today)
     @value = { date => @timings.fetch(date) }
     self
   end
 
-  def today
-    @value = { Date.today => @timings.fetch(Date.today) }
-    self
-  end
-
   def tomorrow
-    @value = { Date.today.next => @timings.fetch(Date.today.next) }
+    get(date: Date.today.next)
     self
   end
 
   def three
-    @value = {
-      Date.today => @timings.fetch(Date.today),
-      Date.today.next => @timings.fetch(Date.today.next),
-      Date.today.next.next => @timings.fetch(Date.today.next.next)
-    }
+    @value = @timings.slice(Date.today, Date.today.next, Date.today.next.next)
     self
   end
 
@@ -52,17 +43,24 @@ class Athan
   end
 
   def next
-    pp @value[Date.today]
+    now = Time.now
+    prayer, timing = self.class.of(athan: less).select { |_, time| now < Time.parse(time) }.shift
+    "#{prayer}: #{timing}"
   end
 
   def as_json
     JSON.pretty_generate(@value)
   end
 
+  def self.of(athan: nil, date: Date.today)
+    athan.value[date] unless athan.nil?
+  end
+
   def self.build_method(athan: nil, args: nil)
     return if athan.nil?
 
-    call = athan.today
+    call = athan.get
+    return call.next if args.key?(:next)
     args.each do |key, value|
       case key
       when :three
