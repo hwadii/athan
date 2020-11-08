@@ -38,7 +38,7 @@ class Parser
   def get_location
     sep = @options[:sep] || '/'
     chunks = ARGV.first&.split(sep, 2)
-    abort 'Incorrect formatting for city and country. Expected \'City/Country\'.' if chunks&.size < 2
+    abort "Incorrect formatting for city and country. Expected 'City#{sep}Country'." if chunks&.size < 2
     chunks
   end
 end
