@@ -51,6 +51,10 @@ class Athan
     end.join("\n\n")
   end
 
+  def next
+    pp @value[Date.today]
+  end
+
   def as_json
     JSON.pretty_generate(@value)
   end

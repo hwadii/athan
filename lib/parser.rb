@@ -26,6 +26,9 @@ class Parser
       parser.on('-m', '--more', 'Display all the possible timings. Default: 5 timings.') do
         @options[:more] = true
       end
+      parser.on('-n', '--next', 'Show next prayer timing of the day.') do
+        @options[:next] = true
+      end
     end.parse!
     city, country = get_location
     @options[:city] = city
