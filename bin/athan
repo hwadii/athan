@@ -7,7 +7,8 @@ require_relative '../lib/athan'
 require_relative '../lib/cache'
 require_relative '../lib/parser'
 
-args = Parser.new.parse
-raw_payload = Cache.new(city: args[:city], country: args[:country])
+parser = Parser.new
+city, country = parser.parse
+raw_payload = Cache.new(city: city, country: country)
 athan = raw_payload.produce
-$stdout.print Athan.build_method(athan: athan, args: args.slice(*Helpers::OPTIONS_NAME)) + "\n"
+puts Athan.build(athan: athan, flags: parser.flags, options: parser.options)
