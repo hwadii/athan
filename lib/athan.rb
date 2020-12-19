@@ -36,7 +36,7 @@ class Athan
 
   def pretty
     @value.map do |date, timings|
-      ret = ["#{date.strftime("%B %-d, %Y").light_yellow}\n"]
+      ret = ["#{date.strftime("%B %-d, %Y").bold.light_yellow}\n"]
       ret << timings.map { |key, time| "#{key.light_green}: #{time.light_cyan}" }
       ret.join("\n")
     end.join("\n\n")
@@ -56,20 +56,14 @@ class Athan
     athan.value[date] unless athan.nil?
   end
 
-  def self.build_method(athan: nil, args: nil)
+  def self.build(athan: nil, flags: 0, options: {})
     return if athan.nil?
 
-    call = athan.get
-    return call.next if args.key?(:next)
-    args.each do |key, value|
-      case key
-      when :three
-        call = call.three
-      when :fetch
-        call = call.get(value)
-      end
-    end
-    call = call.less unless args.key?(:more)
-    args.key?(:json) ? call.as_json : call.pretty
+    call = athan
+    return call.get.next if flags & Parser::FLAGS[:Next] != 0
+    call = call.three if flags & Parser::FLAGS[:Three] != 0
+    call = call.get(date: options[:date]) if flags & Parser::FLAGS[:Date] != 0
+    call = call.less if flags & Parser::FLAGS[:More] == 0
+    flags & Parser::FLAGS[:Json] != 0 ? call.as_json : call.pretty
   end
 end

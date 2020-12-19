@@ -15,7 +15,7 @@ class Cache
     cache_file.close
   end
 
-  def make_request
+  def make_request_or_get_cache
     if check_cache
       @cache[@key]
     else
@@ -24,7 +24,7 @@ class Cache
   end
 
   def produce
-    Athan.new(make_request)
+    Athan.new(make_request_or_get_cache)
   end
 
   def write_cache(to_write)
