@@ -36,7 +36,7 @@ class Athan
 
   def pretty
     @value.map do |date, timings|
-      ret = ["#{date.strftime("%B %-d, %Y").bold.light_yellow}\n"]
+      ret = ["#{date.strftime('%B %-d, %Y').bold.light_yellow}\n"]
       ret << timings.map { |key, time| "#{key.light_green}: #{time.light_cyan}" }
       ret.join("\n")
     end.join("\n\n")
@@ -61,9 +61,10 @@ class Athan
 
     call = athan
     return call.get.next if flags & Parser::FLAGS[:Next] != 0
+
     call = call.three if flags & Parser::FLAGS[:Three] != 0
     call = call.get(date: options[:date]) if flags & Parser::FLAGS[:Date] != 0
-    call = call.less if flags & Parser::FLAGS[:More] == 0
+    call = call.less if flags & Parser::FLAGS[:More].zero?
     flags & Parser::FLAGS[:Json] != 0 ? call.as_json : call.pretty
   end
 end

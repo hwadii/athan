@@ -9,14 +9,14 @@ class Parser
     Date: 0b000100,
     Sep: 0b001000,
     More: 0b010000,
-    Next: 0b100000,
+    Next: 0b100000
   }.freeze
 
   def initialize
     @flags = 0
     @options = {
       sep: nil,
-      date: nil,
+      date: nil
     }.compact
   end
 
@@ -30,8 +30,11 @@ class Parser
       parser.on('-fDATE', '--fetch DATE', 'Fetch prayer timings for a given date') do |date|
         @flags |= FLAGS[:Date]
         abort '-t (three) and -f (fetch) are mutually exclusive. Use one or the other.' if @flags & FLAGS[:Three] == 1
-        date = Date.parse(date) rescue nil
-        abort 'Date is invalid. Give a valid format, e.g. YYYY-MM-DD.' if date.nil?
+        begin
+          date = Date.parse(date)
+        rescue ArgumentError
+          abort 'Date is invalid. Give a valid format, e.g. YYYY-MM-DD.'
+        end
         @options[:date] = date
       end
       parser.on('-J', '--json', 'Get output as a json') do
