@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'helpers'
 require 'json'
 require 'colorize'
@@ -64,7 +66,7 @@ class Athan
 
     call = call.three if flags & Parser::FLAGS[:Three] != 0
     call = call.get(date: options[:date]) if flags & Parser::FLAGS[:Date] != 0
-    call = call.less if flags & Parser::FLAGS[:More].zero?
+    call = call.less if (flags & Parser::FLAGS[:More]).zero?
     flags & Parser::FLAGS[:Json] != 0 ? call.as_json : call.pretty
   end
 end

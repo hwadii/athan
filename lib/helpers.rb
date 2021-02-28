@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'date'
 
 module Helpers
-  CACHE_NAME = 'cache.json'.freeze
+  CACHE_NAME = 'cache.json'
 
   def format_unix(unix)
     Time.at(unix).utc.to_date

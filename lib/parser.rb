@@ -1,15 +1,17 @@
+# frozen_string_literal: true
+
 require 'optparse'
 
 class Parser
   attr_reader :flags, :options
 
   FLAGS = {
-    Three: 0b000001,
-    Json: 0b000010,
-    Date: 0b000100,
-    Sep: 0b001000,
-    More: 0b010000,
-    Next: 0b100000
+    Three: 0b00_0001,
+    Json: 0b00_0010,
+    Date: 0b00_0100,
+    Sep: 0b00_1000,
+    More: 0b01_0000,
+    Next: 0b10_0000
   }.freeze
 
   def initialize
@@ -30,11 +32,12 @@ class Parser
       parser.on('-fDATE', '--fetch DATE', 'Fetch prayer timings for a given date') do |date|
         @flags |= FLAGS[:Date]
         abort '-t (three) and -f (fetch) are mutually exclusive. Use one or the other.' if @flags & FLAGS[:Three] == 1
-        begin
-          date = Date.parse(date)
-        rescue ArgumentError
-          abort 'Date is invalid. Give a valid format, e.g. YYYY-MM-DD.'
+        date = begin
+          Date.parse(date)
+        rescue StandardError
+          nil
         end
+        abort 'Date is invalid. Give a valid format, e.g. YYYY-MM-DD.' if date.nil?
         @options[:date] = date
       end
       parser.on('-J', '--json', 'Get output as a json') do
@@ -52,6 +55,7 @@ class Parser
       end
     end.parse!
 
+    @flags |= FLAGS[:Three] if @flags.zero?
     location
   end
 
@@ -60,7 +64,8 @@ class Parser
   def location
     sep = @options[:sep] || '/'
     chunks = ARGV.first&.split(sep, 2)
-    abort "Incorrect formatting for city and country. Expected 'City#{sep}Country'." if chunks&.size < 2
+    abort 'No arguments found. Aborting.' if chunks.nil?
+    abort "Incorrect formatting for city and country. Expected 'City#{sep}Country'." if chunks.size != 2
     chunks
   end
 end
