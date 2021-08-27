@@ -83,11 +83,6 @@ $ bundle install
 ```
 # TODO
 
-- [x] Accept different formatting options through the CLI
-    - [x] `-t` or `--three` to get next three days of prayer times
-    - [x] `-J` or `--json` to get output in raw json for usage in other scripts
-    - [x] `-f` or `--fetch` which accepts a date and gets the prayer times of an arbitrary date
-    - [x] `-n` to get the next prayer of the current day
-- [ ] Invalidation mechanism for cache (e.g. at the end of the month => the city/country key will still exist but there won't be any correct timings available) 
-- [ ] Better caching mechanism (dotfile?, encryption?)
-- [ ] Ability to customize colors
+- [ ] Disable colors if not a tty
+- [ ] Use `xdg` to get correct cache location
+- [ ] Invalidate cache if new month

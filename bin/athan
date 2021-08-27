@@ -1,14 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'date'
-require 'json'
 require_relative '../lib/athan'
-require_relative '../lib/cache'
-require_relative '../lib/parser'
 
-parser = Parser.new
-city, country = parser.parse
-raw_payload = Cache.new(city: city, country: country)
-athan = raw_payload.produce
-puts Athan.build(athan: athan, flags: parser.flags, options: parser.options)
+Athan.athan!
