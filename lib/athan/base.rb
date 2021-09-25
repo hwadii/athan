@@ -58,12 +58,13 @@ module Athan
 
     def to_s(flags: 0, options: {})
       call = self
-      return call.get.next if flags & Parser::FLAGS[:Next] != 0
+      return call.get.next if flags & Parser::Flags::NEXT != 0
 
-      call = call.three if flags & Parser::FLAGS[:Three] != 0
-      call = call.get(date: options[:date]) if flags & Parser::FLAGS[:Date] != 0
-      call = call.less if (flags & Parser::FLAGS[:More]).zero?
-      flags & Parser::FLAGS[:Json] != 0 ? call.as_json : call.pretty
+      call = call.get if flags.zero?
+      call = call.three if flags & Parser::Flags::THREE != 0
+      call = call.get(date: options[:date]) if flags & Parser::Flags::DATE != 0
+      call = call.less if (flags & Parser::Flags::MORE).zero?
+      flags & Parser::Flags::JSON != 0 ? call.as_json : call.pretty
     end
 
     def self.from_cache(location)
