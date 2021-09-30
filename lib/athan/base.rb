@@ -13,8 +13,10 @@ module Athan
     ADDITIONNAL_TIMINGS = %w[Sunrise Sunset Imsak Midnight].freeze
     ALL_TIMINGS = MAIN_TIMINGS + ADDITIONNAL_TIMINGS
 
-    def initialize(payload)
+    def initialize(payload, flags: 0, options: {})
       @timings = payload['data'].to_h { |day| [Date.parse(day['date']['gregorian']['date']), day['timings']] }
+      @flags = flags
+      @options = options
       @value = nil
     end
 
@@ -56,25 +58,25 @@ module Athan
       JSON.pretty_generate(@value)
     end
 
-    def to_s(flags: 0, options: {})
+    def to_s
       instance = self
-      return instance.get.next if flags & Parser::Flags::NEXT != 0
+      return instance.get.next if @flags & Parser::Flags::NEXT != 0
 
-      instance = instance.get if (flags & Parser::Flags::THREE).zero?
-      instance = instance.three if flags & Parser::Flags::THREE != 0
-      instance = instance.get(date: options[:date]) if flags & Parser::Flags::DATE != 0
-      instance = instance.less if (flags & Parser::Flags::MORE).zero?
-      flags & Parser::Flags::JSON != 0 ? instance.as_json : instance.pretty
+      instance = instance.get if (@flags & Parser::Flags::THREE).zero?
+      instance = instance.three if @flags & Parser::Flags::THREE != 0
+      instance = instance.get(date: @options[:date]) if @flags & Parser::Flags::DATE != 0
+      instance = instance.less if (@flags & Parser::Flags::MORE).zero?
+      @flags & Parser::Flags::JSON != 0 ? instance.as_json : instance.pretty
     end
 
-    def self.from_cache(location)
-      cache = Cache.new(location)
-      new(cache.value)
+    def self.from_cache(parsed_data)
+      cache = Cache.new(parsed_data.location)
+      new(cache.value, flags: parsed_data.flags, options: parsed_data.options)
     end
   end
 
   def self.athan!
-    parser = Parser.parse
-    puts Base.from_cache(parser.location).to_s(flags: parser.flags, options: parser.options)
+    parsed_data = Parser.parse
+    puts Base.from_cache(parsed_data).to_s
   end
 end
