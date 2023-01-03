@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.email       = 'hajji.wadii@gmail.com'
 
   s.add_dependency 'colorize', '~> 0.8.0'
-  s.add_dependency 'httparty', '~> 0.18.0'
+  s.add_dependency 'httparty', '>= 0.18', '< 0.22'
   s.add_dependency 'xdg', '~> 4.5.0'
 
   s.files       = `git ls-files`.split("\n")
